@@ -243,17 +243,23 @@ class CollectionsTest {
     @Test
     void testTreeMap(){
         NavigableMap<Integer, String> m = new TreeMap<>();
-
         /*
-            SortedMap method
+            https://dev.java/learn/api/collections-framework/sorted-maps/
          */
-        // TODO: Complete it.
     }
 
     @DisplayName("Convenience factory method for Set and Map")
     @Test
     void testFactoryMethodSetMap(){
+        Set<Integer> s = Set.of(1, 2, 3);
+        assertThatThrownBy(() -> s.add(4)).isInstanceOf(UnsupportedOperationException.class);
 
+        Map<Integer, String> m = Map.ofEntries(Map.entry(1, "Akshay"), Map.entry(2, "Rathod"));
+        assertThatThrownBy(() -> m.put(1, "Akshit")).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> m.replace(1, "Akshit")).isInstanceOf(UnsupportedOperationException.class);
+
+        Map<Integer, String> m2 = Map.of(1, "Akshay");
+        assertThat(m2).contains(Map.entry(1, "Akshay"));
     }
 
     /**
@@ -291,17 +297,41 @@ class CollectionsTest {
      *  ArrayDeque is efficient compared to LinkedList which also implements Deque. Due to following reasons
      *  1: Pointer chasing : As nodes in LinkedList are stored in random location it causes frequent cash misses.
      *  2: Memory consumption : It is high in case of LinkedList as it also need to store the links.
+     *
+     *  Throws exception        :- addxx(), removexx(), getxx()
+     *  Return special value    :- offerxx(), pollxx(), peekxx()
+     *  where xx = first, last
      */
     @DisplayName("ArrayDeque")
     @Test
     void testArrayDeque(){
         Deque<Integer> q = new ArrayDeque<>();
+
+        q.addFirst(1); q.addLast(2);
+
+        assertThat(q.getFirst()).isEqualTo(1);
+        assertThat(q.getLast()).isEqualTo(2);
+
+        q.removeFirst(); q.removeLast();
+        assertThat(q).isEmpty();
     }
 
+    /**
+     * LinkedHashMap & LinkedHashSet work as usual HashMap and HashSet,
+     * but they also contain a LinkedList structure which maintains insertion order
+     *
+     * Collection -> SequencedCollection -> SequencedSet -> LinkedHashSet
+     */
     @DisplayName("LinkedHashMap & LinkedHashSet")
     @Test
     void testLinkedHashMapLinkedHashSet(){
+        LinkedHashSet<Integer> s = new LinkedHashSet<>(List.of(3, 2, 1));
 
+        Iterator<Integer> it = s.iterator();
+
+        assertThat(it.next()).isEqualTo(3);
+        assertThat(it.next()).isEqualTo(2);
+        assertThat(it.next()).isEqualTo(1);
     }
 
 }
