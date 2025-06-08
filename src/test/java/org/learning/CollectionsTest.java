@@ -118,11 +118,15 @@ class CollectionsTest {
      *  List interface brings two functionality in plain collections
      *  1: Encounter order :- Element appear in same order in which they were inserted
      *  2: Indexing :- we can access elements using index
+     *
+     *  Null elements permitted
      */
     @DisplayName("ArrayList")
     @Test
     void testArrayList(){
-        List<Integer> a = new ArrayList<>();
+
+        // We can only specify initialCapacity. We cannot specify loadFactor
+        List<Integer> a = new ArrayList<>(10);
 
         // Operation on single index
         a.add(2);
@@ -164,10 +168,17 @@ class CollectionsTest {
 
     /**
      * Collection -> Set
+     *
+     * Null elements permitted
+     * Uses HashMap internally
      */
     @DisplayName("HashSet")
     @Test
     void testHashSet(){
+
+        // We can specify both initialCapacity and loadFactor
+        var s1 = new HashSet<Integer>(16, 0.75f);
+
         Set<Integer> s = new HashSet<>(Set.of(1, 2));
 
         s.add(3);
@@ -184,6 +195,9 @@ class CollectionsTest {
     @DisplayName("TreeSet")
     @Test
     void testTreeSet(){
+
+        // We can only provide a comparator or a collection
+        var ts = new TreeSet<Integer>(Comparator.naturalOrder());
 
         Set<Interval> s1 = Set.of(
                 new Interval(10, 15),
@@ -213,12 +227,14 @@ class CollectionsTest {
     }
 
     /**
-     *
+     * Permits null values and keys
      */
     @DisplayName("HashMap")
     @Test
     void testHashMap(){
-        Map<Integer, String> m = new HashMap<>();
+
+        // We can specify both initialCapacity and loadFactor
+        Map<Integer, String> m = new HashMap<>(16, 0.75f);
         m.put(1, "Akshay");
         m.put(2, "Rathod");
         m.put(1, "Kishor");
@@ -242,7 +258,9 @@ class CollectionsTest {
     @DisplayName("TreeMap")
     @Test
     void testTreeMap(){
-        NavigableMap<Integer, String> m = new TreeMap<>();
+
+        // We can only provide a comparator or a map
+        NavigableMap<Integer, Integer> m = new TreeMap<>(Comparator.naturalOrder());
         /*
             https://dev.java/learn/api/collections-framework/sorted-maps/
          */
@@ -269,11 +287,15 @@ class CollectionsTest {
      *  Operations              insert, remove, examine
      * Throws exception     :-  add, remove, element
      * Return special value :-  offer, poll, peek
+     *
+     * Null values are prohibited
      */
     @DisplayName("PriorityQueue")
     @Test
     void testPriorityQueue(){
-        Queue<Integer> q = new PriorityQueue<>();
+
+        // We can only provide an initial capacity and comparator or a collection
+        Queue<Integer> q = new PriorityQueue<>(11, Comparator.naturalOrder());
 
         q.add(22); q.add(205); q.add(1);
 
@@ -294,7 +316,11 @@ class CollectionsTest {
     /**
      *  Collection -> SequencedCollection -> Deque
      *
-     *  ArrayDeque is efficient compared to LinkedList which also implements Deque. Due to following reasons
+     *  Null elements are prohibited
+     *  Faster than Stack class when used as Stack and faster than LinkedList class when used as Queue
+     *  ** Mentioned on Java API Doc
+     *
+     *   Due to following reasons
      *  1: Pointer chasing : As nodes in LinkedList are stored in random location it causes frequent cash misses.
      *  2: Memory consumption : It is high in case of LinkedList as it also need to store the links.
      *
@@ -305,7 +331,9 @@ class CollectionsTest {
     @DisplayName("ArrayDeque")
     @Test
     void testArrayDeque(){
-        Deque<Integer> q = new ArrayDeque<>();
+
+        // We can only specify initialCapacity. We cannot specify loadFactor
+        Deque<Integer> q = new ArrayDeque<>(10);
 
         q.addFirst(1); q.addLast(2);
 
