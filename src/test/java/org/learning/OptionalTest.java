@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 class OptionalTest {
 
-    @DisplayName("Optiional")
+    @DisplayName("Optional")
     @Test
     void test(){
 
