@@ -228,6 +228,7 @@ class CollectionsTest {
 
     /**
      * Permits null values and keys
+     * For null key hashcode() method is not called instead it is stored null in bucket 0
      */
     @DisplayName("HashMap")
     @Test
