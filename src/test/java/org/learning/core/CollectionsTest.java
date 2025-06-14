@@ -1,4 +1,4 @@
-package org.learning;
+package org.learning.core;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -191,6 +191,7 @@ class CollectionsTest {
 
     /**
      * Collection -> SequencedCollection -> SequencedSet -> SortedSet -> NavigableSet
+     *  TreeSet keeps elements in sorted order.
      */
     @DisplayName("TreeSet")
     @Test
@@ -212,9 +213,18 @@ class CollectionsTest {
          */
         assertThat(s.first()).isEqualTo(new Interval(1, 2));
         assertThat(s.last()).isEqualTo(new Interval(10, 15));
-        assertThat(s.headSet(new Interval(5, 4), true)).containsExactly(new Interval(1, 2), new Interval(5, 4));
-        assertThat(s.tailSet(new Interval(5, 16), true)).containsExactly(new Interval(5, 16), new Interval(10, 15));
-        assertThat(s.subSet(new Interval(5, 4), true, new Interval(10, 15), true)).containsExactly(new Interval(5, 4), new Interval(5, 16), new Interval(10, 15));
+
+        assertThat(s.headSet(new Interval(5, 4), true))
+                .containsExactly(new Interval(1, 2), new Interval(5, 4))
+                .isInstanceOf(NavigableSet.class);
+
+        assertThat(s.tailSet(new Interval(5, 16), true))
+                .containsExactly(new Interval(5, 16), new Interval(10, 15))
+                .isInstanceOf(NavigableSet.class);
+
+        assertThat(s.subSet(new Interval(5, 4), true, new Interval(10, 15), true))
+                .containsExactly(new Interval(5, 4), new Interval(5, 16), new Interval(10, 15))
+                .isInstanceOf(NavigableSet.class);
 
         /*
             NavigableSet : It further adds capability on SortedSet to iterate over element in descending order (descendingIterator(), descendingSet())
@@ -222,6 +232,7 @@ class CollectionsTest {
          */
         assertThat(s.ceiling(new Interval(5, 16))).isEqualTo(new Interval(5, 16));
         assertThat(s.floor(new Interval(5, 4))).isEqualTo(new Interval(5, 4));
+
         assertThat(s.higher(new Interval(5, 16))).isEqualTo(new Interval(10, 15));
         assertThat(s.lower(new Interval(5, 4))).isEqualTo(new Interval(1, 2));
     }
@@ -255,6 +266,7 @@ class CollectionsTest {
 
     /**
      *  Map -> SequencedMap -> SortedMap -> NavigableMap
+     *  ***** null key not permitted
      */
     @DisplayName("TreeMap")
     @Test
