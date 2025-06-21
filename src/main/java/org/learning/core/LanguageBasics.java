@@ -1,29 +1,9 @@
 package org.learning.core;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
- * Initialization of variables : Fields of class if not initialized are given default values. Local variables are not initialized
- *                              They must be initialized before using accessing them. If tried to access without initializing
- *                              results in compilation error.
- *
- * Package : It is namespace that groups related classes and interface. Similar to folders.
- *
- * var : Can be used to declare variable in method body, constructor and initializer block cannot be used
- *      in declaring fields of class and method/constructor parameter
- *
- *          ****** Classes and objects
- *
- *      Top level class can only be public or Default access however nested classes can have all four access modifier
- *      i.e. private, default, protected, public
- *
- *      Method signature = method name + parameter
- *
+ * Nested classes, Switch expressions, Enum, Records
  */
-class LanguageBasicsTest {
+class LanguageBasics {
 
     /**
      *      Nested classes
@@ -84,8 +64,6 @@ class LanguageBasicsTest {
 
     }
 
-    @DisplayName("Switch expressions")
-    @Test()
     void testSwitchExpression(){
         var choice  = 10;
 
@@ -99,7 +77,6 @@ class LanguageBasicsTest {
             default -> "Default";   // Default not required in case of Enum
         };
 
-        assertThat(result).isEqualTo("Case three");
     }
 
 
