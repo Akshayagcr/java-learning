@@ -1,24 +1,42 @@
-package org.learning;
+package org.learning.core;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.learning.core.model.Employee;
+import org.learning.core.util.DataUtil;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Source : Stream.of(), Stream.empty(), Stream.generate(()->{}), Stream.iterate(), Collections.stream(), Collections.parallelStream()
+ *
+ * Source : Stream.of(), Stream.empty(), Stream.generate(()->{}), Stream.iterate(),
+ * Collections.stream(), Collections.parallelStream(), Arrays.stream(arr), string.chars()
  *
  * Intermediate operators : filter(), map(), flatMap(), sorted(), distinct(), limit(), skip(), peek()
  *
- * Terminal operators : findFirst(), findAny(), count(), collect(), reduce(), anyMatch(), noneMatch(), allMatch(), foreach(), min(), max()
+ * Terminal operators : findFirst(), findAny(), count(), collect(), reduce(),
+ * anyMatch(), noneMatch(), allMatch(), foreach(), min(), max()
  *
  * IntStream, FloatStream, DoubleStream : ****** summaryStatistics()
+ *
+ *                  ***** Reducing operations *****
+ *
+ * Two type of reduce operation which reduces streams to specific value.
+ *          1: reduce(identity, (collection/String, ele) -> collection.add(ele), Combiner for combining multiple collections)
+ *          2: collect(Collector)
+ *
+ *  Collectors type :
+ *          1: toCollection(CollectionType supplier), toList(), toSet(), toMap(keyMapper, valueMapper, valueCombiner in case of key collision, MapType supplier)
+ *          2: counting(), summingInt(), averagingInt()
+ *          3: joining(delimiter), joining(delimiter, prefix, suffix) -- used for joining list of strings into single string
+ *          4: mapping(mappingFunction, DownStream Collector), filtering(predicate, DownStream Collector), flatMapping(predicate, DownStream Collector)
+ *          5: groupingBy(keyExtractor), groupingBy(keyExtractor, MapTypeSupplier, DownStreamCollector)
+ *          6: partitionBy(keyExtractor), partitionBy(keyExtractor, DownSteam Collector)
+ *          7: minBy(Comparator), maxBy(Comparator)
  *
  */
 class StreamTest {
@@ -150,21 +168,21 @@ class StreamTest {
     @DisplayName("Find Intersection of Two Lists.")
     @Test
     void test13(){
-        // TODO
+        var l = List.of(100, 1, 2, 200);
         var s = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream()
-                .filter(ele -> ele % 2 == 0)
-                .reduce(0, (sum, ele) -> sum + ele);
-        assertThat(s).isEqualTo(30);
+                .filter(l::contains)
+                .toList();
+        assertThat(s).containsSequence(1, 2);
     }
 
     @DisplayName("Sum even and odd numbers in list using streams.")
     @Test
     void test14(){
-        // TODO
-        var s = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream()
-                .filter(ele -> ele % 2 == 0)
-                .reduce(0, (sum, ele) -> sum + ele);
-        assertThat(s).isEqualTo(30);
+        var s = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .collect(Collectors.partitioningBy(
+                        ele -> ele % 2 == 0,
+                        Collectors.summingInt(ele -> ele)));
+        assertThat(s).containsExactlyInAnyOrderEntriesOf(Map.ofEntries(Map.entry(true, 30), Map.entry(false, 25)));
     }
 
     /**
@@ -175,11 +193,18 @@ class StreamTest {
     @DisplayName("GROUP BY Department and Find Max Salary")
     @Test
     void test15(){
-        // TODO
-        var s = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream()
-                .filter(ele -> ele % 2 == 0)
-                .reduce(0, (sum, ele) -> sum + ele);
-        assertThat(s).isEqualTo(30);
+        var s = DataUtil.getEmployees().stream()
+                        .collect(Collectors.groupingBy(
+                                Employee::department,
+                                Collectors.mapping(
+                                        Employee::salary,
+                                        Collectors.maxBy(Comparator.naturalOrder())
+                                )));
+        assertThat(s).containsExactlyInAnyOrderEntriesOf(Map.ofEntries(
+                Map.entry("IT", Optional.of(200000)),
+                Map.entry("HR", Optional.of(10000)),
+                Map.entry("Marketing", Optional.of(35000))
+                ));
     }
 
 

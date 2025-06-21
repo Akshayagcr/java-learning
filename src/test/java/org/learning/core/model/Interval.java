@@ -1,4 +1,4 @@
-package org.learning.model;
+package org.learning.core.model;
 
 //@Builder cannot lombok builder  on record
 public record Interval(int x, int y) implements Comparable<Interval> {

@@ -1,8 +1,8 @@
-package org.learning;
+package org.learning.core;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.learning.model.Interval;
+import org.learning.core.model.Interval;
 
 import java.util.*;
 
