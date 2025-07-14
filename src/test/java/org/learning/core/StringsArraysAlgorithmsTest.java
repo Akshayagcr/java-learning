@@ -69,6 +69,9 @@ class StringsArraysAlgorithmsTest {
                     "name":"Akshay"
                 }
                 """;
+
+        char[] chArr = "Akshay".toCharArray();
+        String[] strArr = "One Two Three".split(" ");
     }
 
     @DisplayName("Arrays")

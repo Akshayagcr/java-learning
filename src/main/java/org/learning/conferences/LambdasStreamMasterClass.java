@@ -11,7 +11,7 @@ import java.util.stream.Stream;
  * Lambdas and Streams Master Class Part 1 José Paumard, Stuart Marks voxxed : https://www.youtube.com/watch?v=ePXnCezwRuw
  * Lambdas and Streams Master Class Part 2 by José Paumard, Stuart Marks : https://www.youtube.com/watch?v=2c_KNH3s2S0&t=456s
  */
-class LambdasStreamMasterClassTest {
+class LambdasStreamMasterClass {
 
     void functionalInterfaces(){
         /*
