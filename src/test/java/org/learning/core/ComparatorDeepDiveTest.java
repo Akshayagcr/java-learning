@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Then
  *  1. Comparator.comparing(Person::getFirstName) is equivalent to Comparator.comparing(Person::getFirstName, Comparator.naturalOrder())
  *
- *  2. When we use Comparator.naturalOrder() it uses the compareTo(otherObj) method of Comparable interface.
+ *  2. When we use Comparator.naturalOrder(), it uses the compareTo(otherObj) method of Comparable interface.
  *
  *  3. As we can pass a comparator to .comparing() method, it allows following
  *              Comparator.comparing(Person::getFirstName, Comparator.comparing(String::length))
@@ -54,7 +54,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *      .thenComparing(keyExtractor), .thenComparing(keyExtractor, keyComparator),
  *      .thenComparingDouble(keyExtractor), .thenComparingInt(keyExtractor), .thenComparingLong(keyExtractor), .reversed()
  *
- * 4: nullsFirst(comparator), nullsLast(comparator)
+ * 4: Comparator.nullsFirst(comparator), Comparator.nullsLast(comparator)
  *      Eg :-
  *              Comparator.comparing(keyExtractor, nullsFirst(naturalOrder()))
  *              Comparator.comparing(keyExtractor, nullsLast(naturalOrder()))

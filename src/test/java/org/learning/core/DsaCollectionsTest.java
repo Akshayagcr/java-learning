@@ -152,7 +152,7 @@ class DsaCollectionsTest {
     @DisplayName("TreeMap")
     @Test
     void testTreeMap(){
-        // lower, higher, ceiling, floor, first, last, pollFirst, pollLast
+        // lowerEntry, higherEntry, ceilingEntry, floorEntry, firstEntry, lastEntry, pollFirst, pollLast
         {
             var m = getTreeMap();
 

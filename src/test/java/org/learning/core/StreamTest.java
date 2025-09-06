@@ -56,6 +56,9 @@ class StreamTest {
         // Intermediate operations
         {
             Stream.of(3, 2, 2, 1).filter(i -> i > 2);
+            Stream.of(3, 2, 2, 1).takeWhile(ele -> ele >= 3); // Takes the longest prefix that satisfies the predicate. Once false it stops immediately.
+            Stream.of(3, 2, 2, 1).dropWhile(i -> i > 2); // Drops the longest prefix that satisfies the predicate. Once false passes all element irrespective of predicate.
+
             Stream.of(3, 2, 2, 1).map(i -> i * 2);
 
             Stream.of(3, 2, 2, 1).sorted();
@@ -72,6 +75,19 @@ class StreamTest {
              */
             listOfList.stream()
                     .flatMap(list -> list.stream());
+
+            /*
+                multiMap : is similar to flat map in sense that it converts a single element in multiple element.
+                It can be used with a method that throws checked exception i.e. if there is no exception we pass elements to downstream.
+                and if there is an exception we just skip.
+             */
+            listOfList.stream()
+                            .<Integer>mapMulti((integerList, downStream) -> {
+                                for(var ele : integerList){
+                                    downStream.accept(ele);
+                                    downStream.accept(ele * 10);
+                                }
+                            });
 
             Stream.of(3, 2, 2, 1).skip(2);
             Stream.of(3, 2, 2, 1).limit(2);

@@ -64,13 +64,13 @@ class CollectionsTest {
         s1 = new ArrayList<>(List.of(1, 2, 3));
         s2 = new ArrayList<>(List.of(3, 4, 5));
         s1.addAll(s2);
-        assertThat(s1).contains(1, 2, 3, 4, 5);
+        assertThat(s1).containsExactly(1, 2, 3, 3, 4, 5);
 
         // Difference
         s1 = new ArrayList<>(List.of(1, 2, 3));
         s2 = new ArrayList<>(List.of(3, 4, 5));
         s1.removeAll(s2);
-        assertThat(s1).contains(1, 2);
+        assertThat(s1).containsExactly(1, 2);
 
         // Inclusion (Membership)
         s1 = new ArrayList<>(List.of(1, 2, 3));
@@ -81,7 +81,7 @@ class CollectionsTest {
         s1 = new ArrayList<>(List.of(1, 2, 3));
         s2 = new ArrayList<>(List.of(3, 4, 5));
         s1.retainAll(s2);
-        assertThat(s1).contains(3);
+        assertThat(s1).containsExactly(3);
 
         /*
             Iteration on collections
@@ -108,9 +108,9 @@ class CollectionsTest {
         assertThat(a.getLast()).isEqualTo(4);
 
         a.removeFirst(); a.removeLast();
-        assertThat(a).contains(1, 2, 3);
+        assertThat(a).containsExactly(1, 2, 3);
 
-        assertThat(a.reversed()).contains(3, 2, 1);
+        assertThat(a.reversed()).containsExactly(3, 2, 1);
     }
 
     /**
@@ -131,7 +131,7 @@ class CollectionsTest {
         // Operation on single index
         a.add(2);
         a.add(0, 1);
-        assertThat(a).contains(1, 2);
+        assertThat(a).containsExactly(1, 2);
 
         a.set(1, 3);
         assertThat(a.get(1)).isEqualTo(3);
@@ -141,7 +141,8 @@ class CollectionsTest {
             1. remove(index)  2. remove(Object)
          */
         a.remove(1);
-        assertThat(a).contains(1);
+        a.remove(Integer.valueOf(1));
+        assertThat(a).isEmpty();
     }
 
     @DisplayName("Convenience factory method for List")
@@ -156,7 +157,7 @@ class CollectionsTest {
         List<Integer> l = Arrays.asList(arr);
         assertThatThrownBy(() -> l.add(4)).isInstanceOf(UnsupportedOperationException.class);
         l.set(2, 4);
-        assertThat(l).contains(1, 2, 4);
+        assertThat(l).containsExactly(1, 2, 4);
 
         /*
             List.of creates an unmodifiable List. elements cannot be updated as well as changed
@@ -331,9 +332,9 @@ class CollectionsTest {
      *
      *  Null elements are prohibited
      *  Faster than Stack class when used as Stack and faster than LinkedList class when used as Queue
-     *  ** Mentioned on Java API Doc
+     *  ** Mentioned in Java API Doc
      *
-     *   Due to following reasons
+     *   LinkedList performs poor due to following reasons
      *  1: Pointer chasing : As nodes in LinkedList are stored in random location it causes frequent cash misses.
      *  2: Memory consumption : It is high in case of LinkedList as it also need to store the links.
      *
