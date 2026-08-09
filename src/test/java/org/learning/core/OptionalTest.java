@@ -23,7 +23,7 @@ class OptionalTest {
             Creating optional
          */
         var opt1 = Optional.of(10); // If we pass null to this method it will throw NullPointerException
-        var opt2 = Optional.ofNullable(null);
+        var opt2 = Optional.ofNullable(null); // Creates empty optional when null is passed
         var opt3 = Optional.empty();
 
         /*
@@ -34,6 +34,7 @@ class OptionalTest {
 
         /*
             Get value if present or default value
+            For difference between orElse and orElseGet refer below testCase test2
          */
         assertThat(opt1.get()).isEqualTo(10);
         assertThat(opt3.orElse("Default value")).isEqualTo("Default value");
@@ -65,6 +66,21 @@ class OptionalTest {
         /*
             stream, filter, map, flatMap
          */
+        opt1.stream();
+    }
+
+    @DisplayName("Difference between orElse and orElseGet")
+    @Test
+    void test2(){
+        var opt1 = Optional.of("Value present");
+
+        IO.println(opt1.orElse(compute()));
+        IO.println(opt1.orElseGet(() -> compute()));
+    }
+
+    private static String compute(){
+        IO.println("Expensive operation ...............");
+        return "Computed value";
     }
 
 }

@@ -33,9 +33,17 @@ class StringsArraysAlgorithmsTest {
         assertThat(s3.length()).isEqualTo(6);
         assertThat(s1.charAt(0)).isEqualTo('A');
 
-        var yCount = s1.chars()
-                .mapToObj(c -> (char)c)
-                .filter(c -> c.equals('y'))
+        /*
+            ******* VIMP : Arrays.stream("Akshay".toCharArray()) -> does not work
+            Arrays.stream only supports below
+                T[] (object arrays)
+                int[]
+                long[]
+                double[]
+         */
+        var yCount = s1.codePoints()
+                .map(Character::toLowerCase)
+                .filter(c -> c == 'y')
                 .count();
         assertThat(yCount).isEqualTo(1);
 
@@ -48,9 +56,9 @@ class StringsArraysAlgorithmsTest {
                 .isEqualTo("kshay")
                 .isInstanceOf(String.class);
 
-        var yCountSb = sb.chars()
-                .mapToObj(c -> (char)c)
-                .filter(c -> c.equals('y'))
+        var yCountSb = sb.codePoints()
+                .map(Character::toLowerCase)
+                .filter(c -> c == 'y')
                 .count();
         assertThat(yCountSb).isEqualTo(1);
 

@@ -20,11 +20,17 @@ class WrapperAndMathFunctionsTest {
         assertThat(Integer.min(1, 2)).isEqualTo(1);
         assertThat(Integer.max(1, 2)).isEqualTo(2);
         assertThat(Integer.sum(1, 2)).isEqualTo(3);
+
+        // Use below compare method when implementing comparator or comparable
+        assertThat(Integer.compare(1, 2)).isLessThan(0);
     }
 
     @DisplayName("Character wrapper")
     @Test
     void testCharacter(){
+        /*
+            **** VIMP: Below method just convert char to int codepoint and pass to prime implementation of  method which accepts int parameter !!!!!!!!!!
+         */
         assertThat(Character.isAlphabetic('a')).isTrue();
         assertThat(Character.isDigit('4')).isTrue();
         assertThat(Character.isUpperCase('A')).isTrue();
@@ -32,6 +38,13 @@ class WrapperAndMathFunctionsTest {
 
         assertThat(Character.toUpperCase('a')).isEqualTo('A');
         assertThat(Character.toLowerCase('A')).isEqualTo('a');
+
+        var countOfA = "Akshay".codePoints()
+                .map(Character::toLowerCase)
+                .filter(c -> c == 'a')
+                .count();
+
+        assertThat(countOfA).isEqualTo(2);
     }
 
     @DisplayName("Math functions")

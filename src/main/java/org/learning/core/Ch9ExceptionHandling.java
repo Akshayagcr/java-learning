@@ -19,5 +19,5 @@ package org.learning.core;
  *                  Errors are usually caused by serious problems that are outside the control of the program, such as running out of memory or a system crash.
  *
  */
-class ExceptionHandling {
+class Ch9ExceptionHandling {
 }

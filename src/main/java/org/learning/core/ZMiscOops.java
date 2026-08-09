@@ -15,7 +15,7 @@ package org.learning.core;
  *                      *** It is the most important pillar of oops, as it allows extensibility.
  *                      Take away polymorphism and there is nothing much left in object-oriented programming.
  */
-public class Ch2Oops {
+public class ZMiscOops {
 
     private class Before {
 

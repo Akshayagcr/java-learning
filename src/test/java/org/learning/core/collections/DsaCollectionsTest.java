@@ -1,4 +1,4 @@
-package org.learning.core;
+package org.learning.core.collections;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

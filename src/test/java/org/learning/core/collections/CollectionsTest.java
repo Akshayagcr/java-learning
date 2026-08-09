@@ -1,4 +1,4 @@
-package org.learning.core;
+package org.learning.core.collections;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -193,6 +193,7 @@ class CollectionsTest {
     /**
      * Collection -> SequencedCollection -> SequencedSet -> SortedSet -> NavigableSet
      *  TreeSet keeps elements in sorted order.
+     *  Based on TreeMap(Red Black Tree).
      */
     @DisplayName("TreeSet")
     @Test
@@ -240,7 +241,7 @@ class CollectionsTest {
 
     /**
      * Permits null values and keys
-     * For null key hashcode() method is not called instead it is stored null in bucket 0
+     * For null key hashcode() method is not called instead it stores null in bucket 0
      */
     @DisplayName("HashMap")
     @Test
@@ -308,8 +309,8 @@ class CollectionsTest {
     @Test
     void testPriorityQueue(){
 
-        // We can only provide an initial capacity and comparator or a collection
-        Queue<Integer> q = new PriorityQueue<>(11, Comparator.naturalOrder());
+        // We can provide an initial capacity, comparator or collection
+        Queue<Integer> q = new PriorityQueue<>(Comparator.naturalOrder());
 
         q.add(22); q.add(205); q.add(1);
 

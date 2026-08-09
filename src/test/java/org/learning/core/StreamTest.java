@@ -9,6 +9,7 @@ import org.learning.util.TestDataUtil;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Gatherers;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -25,13 +26,13 @@ class StreamTest {
         {
             List.of(1, 2, 3).stream();   // Collection.stream()
             Map.ofEntries(Map.entry(1, 2)).entrySet().stream();
-            Arrays.stream(new int[]{1, 2, 3});
+            Arrays.stream(new int[]{1, 2, 3}); // Only supports: T[] (object arrays), int[], long[], double[]
 
             var s = "one two"; var pattern = Pattern.compile(" ");
             pattern.splitAsStream(s);
 
-            "akshay".chars()          // IntStream
-                    .mapToObj(c -> (char)c); // int to Character
+            "akshay".codePoints()          // IntStream
+                    .filter(c -> c == 'a'); // working with codePoint
 
             Stream.empty();
             Stream.of(1, 2, 3);
@@ -64,6 +65,7 @@ class StreamTest {
             Stream.of(3, 2, 2, 1).sorted();
             Stream.of(3, 2, 2, 1).sorted(Comparator.reverseOrder());
             Stream.of(3, 2, 2, 1).distinct();
+            Stream.of(3, 2, 2, 1).unordered();  // Speedups certain operations in parallel pipelines
 
             var listOfList = new ArrayList<List<Integer>>();
             listOfList.add(List.of(1, 2));
@@ -92,6 +94,19 @@ class StreamTest {
             Stream.of(3, 2, 2, 1).skip(2);
             Stream.of(3, 2, 2, 1).limit(2);
             Stream.of(3, 2, 2, 1).peek(System.out::println); // peek(action) - only to be used for debugging purpose
+
+            /*
+                ***** Gatherers enable you to create custom intermediate operations *****
+
+                We can create a gatherer by defining four functions that work together to process input elements.
+                    initializer()
+                    integrator()
+                    combiner()
+                    finisher()
+             */
+            Stream.of(1, 2, 3, 4, 5, 6, 7)
+                    .gather(Gatherers.windowFixed(3))
+                    .toList();
         }
 
         // Terminal operations
@@ -109,7 +124,10 @@ class StreamTest {
             Stream.of(1, 2, 3).reduce(0, (total, ele) -> total + ele);
             Stream.of(1, 2, 3).toList();
             Stream.of(1, 2, 3).toArray();
-            Stream.of(1, 2, 3).forEach(System.out::println);
+            Stream.of(1, 2, 3).forEach(System.out::println); // For parallel stream pipelines,
+            // this operation does not guarantee to respect the encounter order of the stream, as doing so would sacrifice the benefit of parallelism
+
+            Stream.of(1, 2, 3).forEachOrdered(System.out::println); // Encounter order preserved
         }
 
         // Primitive stream operations
@@ -137,15 +155,27 @@ class StreamTest {
     @Test @Disabled
     void testCollectors(){
 
-        toCollection(TreeSet::new); toList(); toSet();
+        toCollection(TreeSet::new); toList(); toSet(); toUnmodifiableList(); toUnmodifiableSet();
         toMap(Employee::name,                                   // KeyMapper
                 Function.identity(),                            // ValueMapper
                 (oldValue, newValue) -> newValue, // MergeFunction
                 HashMap::new);                                  // MapTypeSupplier
+        toConcurrentMap(Employee::name,
+                Function.identity(),
+                (oldValue, newValue) -> newValue);
 
         counting();
         summingInt(Employee::salary); // summingLong(mapper), summingDouble()
         averagingInt(Employee::salary); // averagingInt(mapper), averagingDouble(mapper)
+
+        maxBy(Comparator.naturalOrder());
+        minBy(Comparator.naturalOrder());
+
+        IntSummaryStatistics statistics = TestDataUtil.getEmployees().stream()
+                .collect(
+                summarizingInt(Employee::salary)   // summarizingLong(), summarizingDouble()
+        );
+
 
         joining(); joining(","); joining(",", "prefix-", "-suffix");
 
@@ -155,10 +185,24 @@ class StreamTest {
         // flatMapping(mapper, downStreamCollector);
         
         groupingBy(Employee::department); groupingBy(Employee::department, toSet()); groupingBy(Employee::department, HashMap::new, toSet());
+        groupingByConcurrent(Employee::department); // Optimized for parallel streams
+
         partitioningBy((Employee emp) -> emp.salary() > 50_000); partitioningBy((Employee emp) -> emp.salary() > 50_000, counting());
         
-        maxBy(Comparator.naturalOrder());
-        minBy(Comparator.naturalOrder());
+
+        // Apply finisher function to perform final transformation on the result of collector.
+        collectingAndThen(toSet(), Set::size);
+
+        record MinMaxEmployee(Employee lowestSalaryEmployee, Employee highestSalaryEmployee) {};
+
+        // teeing: pass steam element to both collectors and then combine result of both collectors using merge function
+        teeing(
+                minBy(Comparator.comparing(Employee::salary)),
+                maxBy(Comparator.comparing(Employee::salary)),
+                (min, max)
+                        -> new MinMaxEmployee(min.orElse(null), max.orElse(null))
+        );
+
     }
 
     @DisplayName("Creating frequency map & inverting it")

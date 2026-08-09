@@ -1,4 +1,4 @@
-package org.learning.multithreading;
+package org.learning.core.multithreading;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

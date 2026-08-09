@@ -1,4 +1,4 @@
-package org.learning.multithreading;
+package org.learning.core.multithreading;
 
 /*
     happens before relation : If a thread updates a shared variable then the updates performed by -
